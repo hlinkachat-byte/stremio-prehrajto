@@ -4,13 +4,17 @@
 [functions]
   node_bundler = "esbuild"
 
-# mapuj oficiálne Stremio trasy na functions
+[[redirects]]
+  from = "/"
+  to = "/.netlify/functions/manifest"
+  status = 200
+
 [[redirects]]
   from = "/manifest.json"
-  to   = "/.netlify/functions/manifest"
+  to = "/.netlify/functions/manifest"
   status = 200
 
 [[redirects]]
   from = "/stream/*"
-  to   = "/.netlify/functions/stream"
+  to = "/.netlify/functions/stream"
   status = 200
