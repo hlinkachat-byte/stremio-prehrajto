@@ -1,58 +1,33 @@
-﻿import fetch from 'node-fetch';
-import cheerio from 'cheerio';
-import hjson from 'hjson';
+// netlify/functions/stream.js
+// Minimal Stremio "stream" endpoint bez závislostí.
+// Stremio volá túto funkciu s query parametrom ?id=<IMDB_ID alebo iné ID>
+// Odpoveď musí byť: { streams: [ { title, url } ] }
 
-const PREHRAJ_BASE = 'https://prehraj.to';
-const UA = 'kodi/prehraj.to';
+exports.handler = async (event) => {
+  // ID, ktoré pošle Stremio (napr. "tt0032138" pre film, alebo "tt1234567:1:2" pre S01E02)
+  const id = (event.queryStringParameters && event.queryStringParameters.id) || "";
 
-function parsePlayer(html) {
-  const $ = cheerio.load(html);
-  const scripts = $('script').map((i, el) => $(el).html() || '').get();
-  const target = scripts.find(s => /var\s+sources\s*=/.test(s));
-  let file = '', subs = '';
-
-  if (target) {
-    const mFile = target.match(/file:\s*"(.*?)"/s);
-    if (mFile && mFile[1]) file = mFile[1];
-    const mSrc = target.match(/src:\s*"(.*?)"/s);
-    if (!file && mSrc && mSrc[1]) file = mSrc[1];
-
-    const mTracks = target.match(/var\s+tracks\s*=\s*(.*?);/s);
-    if (mTracks && mTracks[1]) {
-      try {
-        const arr = hjson.parse(mTracks[1]);
-        if (Array.isArray(arr) && arr[0] && arr[0].src) subs = arr[0].src;
-      } catch {}
+  // Tu si môžeš spraviť vlastné mapovanie podľa ID -> URL
+  // Zatiaľ vrátime demo video (public domain), nech si vieš addon hneď otestovať.
+  const demoStreams = [
+    {
+      title: "Test video (MP4)",
+      url: "https://archive.org/download/Popeye_forPresident/Popeye_forPresident_512kb.mp4"
     }
-  }
-  return { file, subs };
-}
+  ];
 
-export const handler = async (event) => {
-  try {
-    const pathParts = event.path.split('/');
-    const rawId = pathParts[pathParts.length - 1].replace('.json', '');
-    const padded = rawId.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(rawId.length / 4) * 4, '=');
-    const relative = Buffer.from(padded, 'base64').toString('utf8');
-    const url = relative.startsWith('http') ? relative : `${PREHRAJ_BASE}${relative}`;
+  // Ak budeš chcieť neskôr riešiť rôzne kvality / titulky, pridaj ďalšie objekty do poľa streams.
 
-    const res = await fetch(url, { headers: { 'user-agent': UA } });
-    const html = await res.text();
-    const { file } = parsePlayer(html);
-
-    if (!file) {
-      return { statusCode: 200, body: JSON.stringify({ streams: [] }) };
-    }
-
-    return {
-      statusCode: 200,
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        streams: [{ title: 'Prehraj.to', url: file }]
-      })
-    };
-  } catch (e) {
-    console.error(e);
-    return { statusCode: 200, body: JSON.stringify({ streams: [] }) };
-  }
+  return {
+    statusCode: 200,
+    headers: {
+      "Content-Type": "application/json",
+      // CORS povolenie pre Stremio
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type"
+    },
+    body: JSON.stringify({
+      streams: demoStreams
+    })
+  };
 };
