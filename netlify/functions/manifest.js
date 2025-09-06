@@ -1,9 +1,13 @@
-﻿import manifest from '../../manifest.json' assert { type: 'json' };
+exports.handler = async () => {
+  const manifest = require("../../manifest.json");
 
-export const handler = async () => {
   return {
     statusCode: 200,
-    headers: { 'content-type': 'application/json' },
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type"
+    },
     body: JSON.stringify(manifest)
   };
 };
