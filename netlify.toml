@@ -1,12 +1,6 @@
-﻿<?[functions]
+[build]
+  functions = "netlify/functions"
+  publish = "."
+
+[functions]
   node_bundler = "esbuild"
-
-[[redirects]]
-  from = "/manifest.json"
-  to = "/.netlify/functions/manifest"
-  status = 200
-
-[[redirects]]
-  from = "/stream/:type/:id.json"
-  to = "/.netlify/functions/stream"
-  status = 200
