@@ -1,10 +1,13 @@
-﻿{
-  "id": "com.prehraj.to",
-  "version": "1.0.0",
-  "name": "Prehraj.to (resolver)",
-  "description": "Resolver Stremio addon pre prehraj.to (premium voliteľné)",
-  "logo": "https://prehraj.to/assets/img/logo.png",
-  "resources": ["stream"],
-  "types": ["movie", "series"],
-  "idPrefixes": ["prehrajto:"]
-}
+exports.handler = async () => {
+  const manifest = require("../../manifest.json");
+
+  return {
+    statusCode: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type"
+    },
+    body: JSON.stringify(manifest)
+  };
+};
