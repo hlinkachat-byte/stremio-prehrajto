@@ -1,0 +1,9 @@
+﻿{
+  "name": "stremio-prehrajto",
+  "version": "1.0.0",
+  "dependencies": {
+    "node-fetch": "^2.6.9",
+    "cheerio": "^1.0.0-rc.12",
+    "hjson": "^3.2.2"
+  }
+}
