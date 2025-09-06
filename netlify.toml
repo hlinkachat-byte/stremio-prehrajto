@@ -4,16 +4,19 @@
 [functions]
   node_bundler = "esbuild"
 
+# Root URL => manifest
 [[redirects]]
   from = "/"
   to = "/.netlify/functions/manifest"
   status = 200
 
+# /manifest.json => manifest
 [[redirects]]
   from = "/manifest.json"
   to = "/.netlify/functions/manifest"
   status = 200
 
+# /stream/... => stream function
 [[redirects]]
   from = "/stream/*"
   to = "/.netlify/functions/stream"
