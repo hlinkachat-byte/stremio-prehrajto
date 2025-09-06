@@ -1,0 +1,10 @@
+﻿{
+  "id": "com.prehraj.to",
+  "version": "1.0.0",
+  "name": "Prehraj.to (resolver)",
+  "description": "Resolver Stremio addon pre prehraj.to (premium voliteľné)",
+  "logo": "https://prehraj.to/assets/img/logo.png",
+  "resources": ["stream"],
+  "types": ["movie", "series"],
+  "idPrefixes": ["prehrajto:"]
+}
