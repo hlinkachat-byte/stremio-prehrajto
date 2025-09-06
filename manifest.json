@@ -4,7 +4,12 @@
   "name": "Prehraj.to (resolver)",
   "description": "Resolver Stremio addon pre Prehraj.to",
   "logo": "https://prehraj.to/assets/img/logo.png",
-  "resources": ["stream"],
+  "resources": [
+    {
+      "name": "stream",
+      "types": ["movie", "series"]
+    }
+  ],
   "types": ["movie", "series"],
   "idPrefixes": ["tt"]
 }
